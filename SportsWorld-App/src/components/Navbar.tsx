@@ -1,0 +1,192 @@
+
+import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+
+export default function Navbar() {
+    //For å finne ut hvilken side brukeren er på og justerer meny etter størrelse på skjerm
+    const { pathname } = useLocation();
+    const [menyOpen, setMenyOpen] = useState(false);
+
+    //Sjekker om man er inne på athletes- eller venues-sider
+    const isAthletes = pathname.startsWith("/athletes");
+    const isVenues = pathname.startsWith("/venues");
+
+    return (
+    <header className="bg-white border-b border-tennisGreen/30 shadow-sm relative z-50">
+        <nav className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+
+            { /* Logo */ }
+            <NavLink to="/" className="flex items-baseline gap-2 hover:opacity-80 transition">
+                <span className="font-serif text-2xl tracking-wide text-tennisGreen"> 
+                    SportsWorld 
+                </span>
+                <span className="text-xs uppercase tracking-[0.25em] text-tennisDark/70"> 
+                    Tennis 
+                </span>
+            </NavLink>
+
+            { /* Links */ }
+            <div className="hidden md:flex items-center gap-6 text-sm">
+
+            {/* Home */ }
+            <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+                `px-3 py-1 rounded-full transition ${
+                    isActive ?  "bg-tennisGreen text-white" : "text-tennisDark hover:bg-tennisPink"
+                }`
+                }
+            > 
+                Home 
+            </NavLink>
+
+            { /* Finance */ }
+            <NavLink 
+            to="/finance"
+            className={({ isActive }) =>
+                `px-3 py-1 rounded-full transition  ${
+                    isActive ? "bg-tennisGreen text-white" : "text-tennisDark hover:bg-tennisPink/40"
+                }`
+            }
+        >
+                Finance
+            </NavLink>
+
+            { /* Athletes dropdown */ }
+            <div className="relative group">
+                <NavLink
+                    to="/athletes"
+                    className={`
+                        px-3 py-1 rounded-full transition
+                        ${isAthletes ? "bg-tennisGreen text-white" : "text-tennisDark hover:bg-tennisPink/40"}
+                    `}
+                >
+                    Athletes
+                </NavLink>
+
+                <div className="absolute left-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-tennisGreen/20 py-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-1">
+
+                    <NavLink
+                        to="/athletes"
+                        className="block px-4 py-2 text-sm text-tennisDark hover:bg-tennisPink/30"
+                    > 
+                        See all athletes 
+                    </NavLink>
+
+                    <NavLink
+                        to="/athletes/register"
+                        className="block px-4 py-2 text-sm text-tennisDark hover:bg-tennisPink/30">
+                            Register athlete
+                    </NavLink>
+                </div>
+            </div>
+
+            { /* Venues dropdown */ }
+            <div className="relative group">
+                <NavLink
+                    to="/venues"
+                    className={`
+                        px-3 py-1 rounded-full transition
+                        ${isVenues ? "bg-tennisGreen text-white" : "text-tennisDark hover:bg-tennisPink/40"}
+                    `}
+                >
+                    Venues
+                </NavLink>
+
+                <div className="absolute left-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-tennisGreen/20 py-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-1">
+
+                <NavLink
+                    to="/venues"
+                    className="block px-4 py-2 text-sm text-tennisDark hover:bg-tennisPink/30"
+                >
+                    See all venues
+                </NavLink>
+
+                <NavLink
+                    to="/venues/admin"
+                    className="block px-4 py-2 text-sm text-tennisDark hover:bg-tennisPink/30"
+                >
+                    Register venue
+                </NavLink>
+                </div>
+            </div>
+        </div>
+
+        {/* Burger meny for mobil */}
+        <button
+        className="md:hidden text-tennisGreen text-3xl"
+        onClick={()=> setMenyOpen(!menyOpen)}>
+            ☰
+        </button>
+        
+    </nav>
+    {menyOpen && (
+        <div className="md:hidden bg-white border-t border-tennisGreen/20 px-4 py-4 space-y-3">
+
+            <NavLink
+                to="/"
+                className="block px-3 py-2 rounded-lg text-tennisDark hover:bg-tennisPink/30"
+                onClick={()=> setMenyOpen(false)}
+            >
+                Home
+            </NavLink>
+            <NavLink
+                to="/finance"
+                className="block px-3 py-2 rounded-lg text-tennisDark hover:bg-tennisPink/30"
+                onClick={()=> setMenyOpen(false)}
+            >
+                Finance
+            </NavLink>
+            
+            <details className="cursor-pointer">
+                <summary className="px-3 py-2 rounded-lg text-tennisDark hover:bg-tennisPink/30">
+                    Athletes
+                </summary>
+                <div className="pl-4 space-y-2 mt-2">
+                    <NavLink
+                        to="/athletes"
+                        className="block text-sm py-1 hover:text-tennisGreen"
+                        onClick={()=> setMenyOpen(false)}
+                    >
+                        See all athletes
+                    </NavLink>
+                    <NavLink
+                        to="/athletes/register"
+                        className="block text-sm py-1 hover:text-tennisGreen"
+                        onClick={()=> setMenyOpen(false)}
+                    >
+                        Register athlete
+                    </NavLink>
+
+                </div>
+            </details>
+
+            <details className="cursor-pointer">
+                <summary className="px-3 py-2 rounded-lg text-tennisDark hover:bg-tennisPink/30">
+                    Venues
+                </summary>
+                <div className="pl-4 space-y-2 mt-2">
+                    <NavLink
+                        to="/venues"
+                        className="block text-sm py-1 hover:text-tennisGreen"
+                        onClick={()=> setMenyOpen(false)}
+                    >
+                        See all venues
+                    </NavLink>
+                    <NavLink
+                        to="/venues/admin"
+                        className="block text-sm py-1 hover:text-tennisGreen"
+                        onClick={()=> setMenyOpen(false)}
+                    >
+                        Register venue 
+                    </NavLink>
+                </div>
+            </details>
+
+        </div>
+    )}
+</header>
+);
+}
